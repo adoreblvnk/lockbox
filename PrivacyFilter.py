@@ -7,6 +7,7 @@ import os
 from unicodedata import name
 from Processor import KeywordProcessor
 
+
 class PrivacyFilter:
     def __init__(self):
         self.keyword_processor = KeywordProcessor(case_sensitive=False)
@@ -48,11 +49,13 @@ class PrivacyFilter:
                     for c in self._punctuation:
                         self.keyword_processor.add_keyword(
                             "{n}{c}".format(n=name, c=c),
-                            "{n}{c}".format(n=fields[field]["replacement"], c=c)
+                            "{n}{c}".format(
+                                n=fields[field]["replacement"], c=c)
                         )
             else:
                 for name in self.file_to_list(field):
-                    self.keyword_processor.add_keyword(name, fields[field]["replacement"])
+                    self.keyword_processor.add_keyword(
+                        name, fields[field]["replacement"])
 
         for name in self.file_to_list(os.path.join('datasets', 'firstnames.csv')):
             self.keyword_processor_names.add_keyword(name, "<NAME>")
@@ -60,7 +63,8 @@ class PrivacyFilter:
         for name in self.file_to_list(os.path.join('datasets', 'lastnames.csv')):
             self.keyword_processor_names.add_keyword(name, "<NAME>")
 
-        ul = '\u00a1-\uffff'  # Unicode letters range (must not be a raw string).
+        # Unicode letters range (must not be a raw string).
+        ul = '\u00a1-\uffff'
 
         # IP patterns
         ipv4_re = r'(?:0|25[0-5]|2[0-4]\d|1\d?\d?|[1-9]\d?)(?:\.(?:0|25[0-5]|2[0-4]\d|1\d?\d?|[1-9]\d?)){3}'
@@ -78,25 +82,29 @@ class PrivacyFilter:
                   r'5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\]?'
 
         # Host patterns
-        hostname_re = r'[a-z' + ul + r'0-9](?:[a-z' + ul + r'0-9-]{0,61}[a-z' + ul + r'0-9])?'
+        hostname_re = r'[a-z' + ul + \
+            r'0-9](?:[a-z' + ul + r'0-9-]{0,61}[a-z' + ul + r'0-9])?'
         # Max length for domain name labels is 63 characters per RFC 1034 sec. 3.1
         domain_re = r'(?:\.(?!-)[a-z' + ul + r'0-9-]{1,63}(?<!-))*'
         tld_re = (
-                r'\.'                                # dot
-                r'(?!-)'                             # can't start with a dash
-                r'(?:[a-z' + ul + '-]{2,63}'         # domain label
-                r'|xn--[a-z0-9]{1,59})'              # or punycode label
-                r'(?<!-)'                            # can't end with a dash
-                r'\.?'                               # may have a trailing dot
+            r'\.'                                # dot
+            r'(?!-)'                             # can't start with a dash
+            r'(?:[a-z' + ul + '-]{2,63}'         # domain label
+            r'|xn--[a-z0-9]{1,59})'              # or punycode label
+            r'(?<!-)'                            # can't end with a dash
+            r'\.?'                               # may have a trailing dot
         )
         host_re = '(' + hostname_re + domain_re + tld_re + '|localhost)'
 
         self.url_re = re.compile(
-            r'([a-z0-9.+-]*:?//)?'                                       # scheme is validated separately
-            r'(?:[^\s:@/]+(?::[^\s:@/]*)?@)?'                           # user:pass authentication
+            # scheme is validated separately
+            r'([a-z0-9.+-]*:?//)?'
+            # user:pass authentication
+            r'(?:[^\s:@/]+(?::[^\s:@/]*)?@)?'
             r'(?:' + ipv4_re + '|' + ipv6_re + '|' + host_re + ')'
             r'(?::\d{2,5})?'                                            # port
-            r'(?:[/?#][^\s]*)?',                                        # resource path
+            # resource path
+            r'(?:[/?#][^\s]*)?',
             re.IGNORECASE
         )
         self.use_wordlist = wordlist_filter
@@ -136,7 +144,7 @@ class PrivacyFilter:
                       "<EMAIL>",
                       text)
         return text
-        
+
     @staticmethod
     def remove_cc(text):
         text = re.sub("(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})",
@@ -147,7 +155,7 @@ class PrivacyFilter:
     def remove_url(self, text):
         text = re.sub(self.url_re, "<URL>", text)
         return text
-    
+
     @staticmethod
     def remove_postal_codes(text):
         text = re.sub(r"\d{6}", "<POSTCODE>", text)
@@ -172,9 +180,12 @@ class PrivacyFilter:
     def cleanup_text(result):
         result = re.sub("<[A-Z _]+>", "<FILTERED>", result)
         result = re.sub(" ([ ,.:;?!])", "\\1", result)
-        result = re.sub(" +", " ", result)                          # remove multiple spaces
-        result = re.sub("\n +", "\n", result)                       # remove space after newline
-        result = re.sub("( <FILTERED>)+", " <FILTERED>", result)    # remove multiple consecutive <FILTERED> tags
+        # remove multiple spaces
+        result = re.sub(" +", " ", result)
+        # remove space after newline
+        result = re.sub("\n +", "\n", result)
+        # remove multiple consecutive <FILTERED> tags
+        result = re.sub("( <FILTERED>)+", " <FILTERED>", result)
         return result.strip()
 
     def filter(self, text, set_numbers_zero=False):
@@ -189,15 +200,16 @@ class PrivacyFilter:
 
 def check_pii(sentence):
     print(sentence)
-    
+
     pfilter = PrivacyFilter()
     pfilter.initialize()
     sentence = pfilter.filter(sentence, set_numbers_zero=False)
-    
+
     print(sentence)
     if "FILTERED" in sentence:
         return True
-        
+
+
 if __name__ == "__main__":
     sentence = '''
 5105105105105100

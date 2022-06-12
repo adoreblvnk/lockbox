@@ -39,12 +39,11 @@ socketio = SocketIO(app)
 from Mark_AFC import *
 
 
-
-
 @socketio.event
 def connect():
     print('Client connected')
     print(request.remote_addr)
+
 
 @socketio.on('disconnect')
 def test_disconnect():
@@ -53,14 +52,15 @@ def test_disconnect():
     starttime = tempLogs[request.remote_addr].get('start')
     endtime = datetime.now()
     sessionLength = (endtime-starttime).seconds
-    file=tempLogs[request.remote_addr].get('file')
-    country=tempLogs[request.remote_addr].get('country')
-    username=tempLogs[request.remote_addr].get('username')
-    username=tempLogs[request.remote_addr].get('username')
-    time_accessed=starttime.strftime(format="%Y-%m-%dT%H:%M")
+    file = tempLogs[request.remote_addr].get('file')
+    country = tempLogs[request.remote_addr].get('country')
+    username = tempLogs[request.remote_addr].get('username')
+    username = tempLogs[request.remote_addr].get('username')
+    time_accessed = starttime.strftime(format="%Y-%m-%dT%H:%M")
     path = f"files/LockBoard.log"
     file_object = open(path, 'a')
-    file_object.write(str(file+'|'+time_accessed+'|'+str(sessionLength+1)+'|'+country+'|'+username+'\n'))
+    file_object.write(str(file+'|'+time_accessed+'|' +
+                      str(sessionLength+1)+'|'+country+'|'+username+'\n'))
     file_object.close()
     print(tempLogs[request.remote_addr])
     tempLogs[request.remote_addr] = {}
@@ -79,5 +79,5 @@ if __name__ == "__main__":
     cache_buster()
     jwt = JWTManager(app)
     jwt = JWT(app, user.authenticate, user.identity)
-    socketio.run(app,debug=app.config['DEBUG'], port=app.config['PORT'])
+    socketio.run(app, debug=app.config['DEBUG'], port=app.config['PORT'])
     app.run(debug=app.config['DEBUG'], port=app.config['PORT'])

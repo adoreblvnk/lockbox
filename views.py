@@ -295,7 +295,7 @@ def new_file():
             os.remove(path)
             flash("Virus detected. File has been deleted.", "danger")
             return redirect("/files")
-        
+
         file_obj = file_handler.File(secure_filename(f.filename), path)
         # josef: remove file password encryption
         # key = str(request.form['key'])
@@ -380,7 +380,8 @@ def rich_edit(filename):
     if request.method == 'GET':
         if check_AFC_permission(filename) == False:
             abort(404)  # Mark
-        logMe(filename,request.remote_addr,tempLogs,session['username']) # Mark
+        logMe(filename, request.remote_addr,
+              tempLogs, session['username'])  # Mark
         newCode = AFCnewcode(filename, AFCDATA)  # Mark
         path = Path(f"files/{session['username']}/{filename}")
         with open(path) as t:
@@ -402,7 +403,8 @@ def rich_submit(filename):
             newtext = request.form.get('updatedtext')
             if check_pii(newtext) == True:
                 myfile.write(newtext)
-                flash(f"{filename} might contain sensitive information. You can either encrypt it or modify it", "info")
+                flash(
+                    f"{filename} might contain sensitive information. You can either encrypt it or modify it", "info")
                 return redirect("/files")
             myfile.write(newtext)
             flash(f"'{filename}' updated", "info")
@@ -417,7 +419,8 @@ def plain_edit(filename):
     if request.method == 'GET':
         if check_AFC_permission(filename) == False:
             abort(404)  # Mark
-        logMe(filename,request.remote_addr,tempLogs,session['username']) # Mark
+        logMe(filename, request.remote_addr,
+              tempLogs, session['username'])  # Mark
         newCode = AFCnewcode(filename, AFCDATA)  # Mark
         path = Path(f"files/{session['username']}/{filename}")
         with open(path) as t:
@@ -439,9 +442,10 @@ def plain_submit(filename):
             newtext = request.form.get('updatedtext')
             if check_pii(newtext) == True:
                 myfile.write(newtext)
-                flash(f"{filename} might contain sensitive information. You can either encrypt it with LockBoard or modify it", "info")
+                flash(
+                    f"{filename} might contain sensitive information. You can either encrypt it with LockBoard or modify it", "info")
                 return redirect("/files")
-            
+
             myfile.write(newtext)
             flash(f"'{filename}' updated", "info")
             return redirect("/files")
@@ -458,6 +462,7 @@ def logout():
 def page_not_found(e):
     # set 404 status explicitly
     return render_template('404.html'), 404
+
 
 class SupportVectorMachine():
     def clustering(sec: int) -> None:

@@ -19,7 +19,8 @@ class KeywordProcessor(object):
                 Defaults to False
         """
         self._keyword = '_keyword_'
-        self.non_word_boundaries = set(string.digits + string.ascii_letters + '_')
+        self.non_word_boundaries = set(
+            string.digits + string.ascii_letters + '_')
         self.keyword_trie_dict = dict()
         self.case_sensitive = case_sensitive
 
@@ -139,7 +140,8 @@ class KeywordProcessor(object):
                             current_word = current_word_continued
                     current_dict = self.keyword_trie_dict
                     if longest_sequence_found:
-                        new_sentence.append(longest_sequence_found + current_white_space)
+                        new_sentence.append(
+                            longest_sequence_found + current_white_space)
                         current_word = ''
                     else:
                         new_sentence.append(current_word)
