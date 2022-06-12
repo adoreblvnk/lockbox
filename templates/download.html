@@ -1,0 +1,29 @@
+{% extends "layout.html" %} {% block content %}
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <i class="fa fa-angle-left" aria-hidden="true"></i>
+    <a href="/files">go back</a>
+  </li>
+</ol>
+
+<!-- Page Content -->
+<div class="card w-50">
+  <div class="card-header">Download file</div>
+  <div class="card-body">
+    <form method="POST">
+      
+      <!-- josef: csrf tokens. -->
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+      <!-- josef: remove file password encryption -->
+      <!-- {{ form.key(class="form-control") }} -->
+      
+      <br />
+      <input class="btn btn-primary" type="submit" />
+    </form>
+  </div>
+</div>
+
+{% endblock %}

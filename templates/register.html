@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>LockBox - Register</title>
+    <!-- Webcam Javascript -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"
+    ></script>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="/static/vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <!-- Custom styles for this template-->
+    <link href="/static/css/sb-admin.css" rel="stylesheet" />
+
+    <style>
+      /* Add a green text color and a checkmark when the requirements are right */
+      .valid {
+        color: green;
+      }
+
+      .valid:before {
+        position: relative;
+        left: 0px;
+        content: "✔";
+      }
+
+      /* Add a red text color and an "x" when the requirements are wrong */
+      .invalid {
+        color: red;
+      }
+
+      .invalid:before {
+        position: relative;
+        left: 0px;
+        content: "✖";
+      }
+
+      /* The message box is shown when the user clicks on the password field */
+      #message {
+        display: none;
+        background: #f1f1f1;
+        color: #000;
+        position: relative;
+        padding: 20px;
+        margin-top: 10px;
+      }
+
+      #message p {
+        padding: 10px 35px;
+        font-size: 18px;
+      }
+
+      .input-group-prepend {
+        width: 36px;
+        height: 38px;
+      }
+    </style>
+  <script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
+
+  <body class="bg-dark">
+    {% block body %}
+    <div class="container">
+      {% include "includes/_flashmsg.html" %}
+      <div class="card card-register mx-auto mt-5">
+        <div class="card-header">Register an Account</div>
+        {% from "includes/_formhelpers.html" import render_field %}
+        <div class="card-body">
+          <form method="POST" action="">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <dt><label for="username"></label></dt>
+            <div class="input-group mb-3">
+              {#render_field(form.username, class_="form-control")#}
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"
+                  ><i class="fa fa-user"></i
+                ></span>
+              </div>
+              <input
+                autofocus=""
+                class="form-control"
+                id="username"
+                maxlength="100"
+                minlength="1"
+                name="username"
+                placeholder="Username"
+                type="text"
+                value=""
+                required
+              />
+            </div>
+            <dt><label for="password"></label></dt>
+            <div class="input-group mb-3">
+              {#render_field(form.password, class_="form-control")#}
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon 1"
+                  ><i class="fa fa-key"></i
+                ></span>
+              </div>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Password"
+                id="password"
+                maxlength="100"
+                minlength="3"
+                aria-label="Password"
+                aria-describedby="basic-addon 1"
+                value=""
+                required
+              />
+            </div>
+            <div>
+              <div>
+                <div id="message">
+                  <h5>Password must contain the following:</h5>
+                  <p id="letter" class="invalid">A lowercase letter</p>
+                  <p id="capital" class="invalid">
+                    A capital (uppercase) letter
+                  </p>
+                  <p id="number" class="invalid">A number</p>
+                  <p id="length" class="invalid">Minimum 8 characters</p>
+                </div>
+              </div>
+            </div>
+            <dt><label for="mobile"></label></dt>
+            <div class="input-group mb-3">
+              {#render_field(form.mobile, class_="form-control")#}
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon2"
+                  ><i class="fa fa-mobile"></i
+                ></span>
+              </div>
+              <input
+                type="text"
+                name="mobile"
+                class="form-control"
+                placeholder="Phone Number"
+                id="mobile"
+                maxlength="100"
+                minlength="3"
+                value=""
+                required
+              />
+            </div>
+            <div class="form-group">
+              {{render_field(form.activation, class="form-control")}}
+            </div>
+
+            <!-- Edwin Face Recognition -->
+            <div class="form-group">
+              <label for="submitPhoto"><b>Register your face</b></label>
+              <input
+                type="hidden"
+                name="submitPhoto"
+                id="submitPhoto"
+                required
+              />
+              <input type="button" class="btn btn-outline-primary" value="Open Camera" onclick="openCamera()" />
+              <input
+                type="button"
+                class="btn btn-outline-primary"
+                value="Take a Snap"
+                id="btPic"
+                onclick="takeSnapShot()"
+              />
+
+              <div
+                id="camera"
+                style="
+                  height: auto;
+                  width: auto;
+                  text-align: left;
+                  display: none;
+                "
+              ></div>
+              <p id="snapShot" style="display: none"></p>
+            </div>
+            {{form.recaptcha()}}
+            <br />
+            <button
+              class="btn btn-primary btn-block"
+              type="submit"
+              onclick="loading();"
+            >
+              Register
+            </button>
+          </form>
+          <div class="text-center">
+            <a class="d-block small mt-3" href="login">Login Page</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var myInput = document.getElementById("password");
+      var letter = document.getElementById("letter");
+      var capital = document.getElementById("capital");
+      var number = document.getElementById("number");
+      var length = document.getElementById("length");
+
+      // When the user clicks on the password field, show the message box
+      myInput.onfocus = function () {
+        document.getElementById("message").style.display = "block";
+      };
+
+      // When the user clicks outside of the password field, hide the message box
+      myInput.onblur = function () {
+        document.getElementById("message").style.display = "none";
+      };
+
+      // When the user starts to type something inside the password field
+      myInput.onkeyup = function () {
+        // Validate lowercase letters
+        var lowerCaseLetters = /[a-z]/g;
+        if (myInput.value.match(lowerCaseLetters)) {
+          letter.classList.remove("invalid");
+          letter.classList.add("valid");
+        } else {
+          letter.classList.remove("valid");
+          letter.classList.add("invalid");
+        }
+
+        // Validate capital letters
+        var upperCaseLetters = /[A-Z]/g;
+        if (myInput.value.match(upperCaseLetters)) {
+          capital.classList.remove("invalid");
+          capital.classList.add("valid");
+        } else {
+          capital.classList.remove("valid");
+          capital.classList.add("invalid");
+        }
+
+        // Validate numbers
+        var numbers = /[0-9]/g;
+        if (myInput.value.match(numbers)) {
+          number.classList.remove("invalid");
+          number.classList.add("valid");
+        } else {
+          number.classList.remove("valid");
+          number.classList.add("invalid");
+        }
+
+        // Validate length
+        if (myInput.value.length >= 8) {
+          length.classList.remove("invalid");
+          length.classList.add("valid");
+        } else {
+          length.classList.remove("valid");
+          length.classList.add("invalid");
+        }
+      };
+    </script>
+
+    <script>
+      // Edwin Camera JS Start
+      // CAMERA SETTINGS.
+      Webcam.set({
+        width: 400,
+        height: 400,
+        image_format: "jpeg",
+        jpeg_quality: 100,
+      });
+
+      openCamera = function () {
+        document.getElementById("camera").style.display = "block";
+        Webcam.attach("#camera");
+      };
+      // SHOW THE SNAPSHOT.
+      takeSnapShot = function () {
+        Webcam.snap(function (data_uri) {
+          console.log(data_uri);
+          document.getElementById("camera").style.display = "none";
+          document.getElementById("snapShot").innerHTML =
+            '<img src="' + data_uri + '" width="400px" height="300px" />';
+          document.getElementById("snapShot").style.display = "block";
+
+          document.getElementById("submitPhoto").value = data_uri;
+        });
+      };
+      // Edwin Camera JS End
+    </script>
+    {% endblock %}
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script type="text/javascript">(function(){window['__CF$cv$params']={r:'6dd575460ae88838',m:'6bC7GQgt9yv3lFRWoABBmtgOnN0q4dVJaW4YWQwkyxY-1644832917-0-AZBi74s7dCG0C8dmPLb7eEmFFP0LrUlkdNsc3Z8LAyCqkM4+U5JrJTywPTIvWTolDkG5/9KdABV51FgZDCmPr0o1vHqIDHYyGCD2j3RHailnm/Wbhk1PQsIg/L7MhMAd5exs4Lt82dLkOF6qW3N8NvqEJrWptbr5LaVdzdJqIACc441Stk+uaftJfbxgw0YTJi6QmNid0yOpwrY7AGECJ30=',s:[0x83fb634004,0xb6e48ca978],}})();</script></body>
+</html>
+<!-- # Aden Seow -->

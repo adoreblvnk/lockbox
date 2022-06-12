@@ -1,0 +1,55 @@
+For convenience, assign AFCDATA to db['Mark_AFCDATA'] or similar
+
+to main.py, add:
+====================
+from flask_socketio import SocketIO, emit
+socketio = SocketIO(app)
+from Mark_AFC import *
+
+to views.py, add:
+from flask_socketio import SocketIO, emit
+from Mark_AFC import *
+===============================
+
+to EACH route that might require AFC checking:
+add during the request handling
+================================================================
+if check_AFC_permission(filename) == False: abort(404) #Mark
+
+
+to EACH route that should be logged as access
+================================================
+logMe(filename,request.remote_addr,tempLogs,session['username'])#Mark
+
+add just before render template:
+
+newCode = AFCnewcode(filename,AFCDATA) #Mark
+add 'newcode' block to bottom of HTML "{{newcode|safe}}""
+to tables.html add:
+====================
+                        <a
+                  class="btn btn-dark"
+                  href="Mark_AFC_admin/{{ value }}"
+                  role="button">
+                  <i class="fa fa-cogs" aria-hidden="true"></i
+                >&nbspAdvanced File Editor</a>
+
+              <a
+                  class="btn btn-dark"
+                  href="Mark_LockBoard/{{ value }}"
+                  role="button">
+                  <i class="fa fa-eye" aria-hidden="true"></i
+                >&nbspView in LockBoard</a>
+
+To the end of the operations TD
+
+
+to ANY page that might require AES decryption:
+Ensure either id of textDisplay, or iframe tinymce
+
+=======
+to any page displaying encrypted data:
+
+if (text[:3]) == 'AES':
+                    istext=2
+                    text=text[3:]

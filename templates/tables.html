@@ -1,0 +1,155 @@
+{% extends "layout.html" %} {% block content %} {% include
+"includes/_flashmsg.html" %}
+
+<section>
+  <div class="">
+    <a class="btn btn-success" href="newfile" role="button"
+      >New file <i class="fa fa-upload" aria-hidden="true"></i
+    ></a>
+  </div>
+</section>
+<br />
+
+<!-- DataTables Example -->
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-table"></i>
+    Data Table
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered"
+        id="dataTable"
+        width="100%"
+        cellspacing="0"
+      >
+        <thead>
+          <tr>
+            <th>filename</th>
+            <th>operation</th>
+            <th style="width: 15%">version control</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for value in files %}
+          <tr>
+            <td>{{ value }} <i class="fa fa-lock" aria-hidden="true"></i></td>
+            <td>
+              <div class="btn-group btn-group-sm">
+                <a
+                  class="btn btn-danger"
+                  href="files/{{ value }}/delete"
+                  role="button"
+                  ><i class="fa fa-trash" aria-hidden="true"></i
+                ></a>
+                <a
+                  class="btn btn-primary"
+                  href="files/{{ value }}/download"
+                  role="button"
+                  ><i class="fa fa-download" aria-hidden="true"></i
+                ></a>
+
+                <!-- edwin: rich text editor -->
+                <a
+                  class="btn btn-primary"
+                  href="files/{{ value }}/modify"
+                  role="button"
+                >
+                  <i
+                    class="fa fa-edit"
+                    aria-hidden="true"
+                    title="Richtext Editor"
+                  ></i
+                ></a>
+
+                <a
+                  class="btn btn-secondary"
+                  href="files/{{ value }}/cleanmodify"
+                  role="button"
+                >
+                  <i
+                    class="fa fa-edit"
+                    aria-hidden="true"
+                    title="Plaintext Editor"
+                  ></i
+                ></a>
+
+                <!-- josef: image viewer  -->
+                {% if value.endswith(".png") %}
+                <a
+                  class="btn btn-secondary"
+                  href="files/{{ value }}/imageviewer"
+                  role="button"
+                >
+                  <i
+                    class="fa fa-image"
+                    aria-hidden="true"
+                    title="Image Viewer"
+                  ></i
+                ></a>
+                {% elif value.endswith(".jpg") %}
+                <a
+                  class="btn btn-secondary"
+                  href="files/{{ value }}/imageviewer"
+                  role="button"
+                >
+                  <i
+                    class="fa fa-image"
+                    aria-hidden="true"
+                    title="Image Viewer"
+                  ></i
+                ></a>
+                {% endif %}
+
+              </div>
+              <a
+                class="btn btn-dark"
+                href="Mark_AFC_admin/{{ value }}"
+                role="button"
+              >
+                <i class="fa fa-cogs" aria-hidden="true"></i>&nbspAdvanced File
+                Editor</a
+              >
+
+              <a
+                class="btn btn-dark"
+                href="Mark_LockBoard/{{ value }}"
+                role="button"
+              >
+                <i class="fa fa-eye" aria-hidden="true"></i>&nbspView in
+                LockBoard</a
+              >
+
+              <!-- josef: anonymous sharing -->
+              <div class="btn-group btn-group-sm">
+                <a
+                  class="btn btn-success"
+                  href="sharing/{{ value }}"
+                  role="button"
+                >
+                  <i class="fa fa-share" aria-hidden="true"></i
+                > Anonymous Sharing</a>
+              </div>
+
+            </td>
+            <td>
+              <div class="btn-group btn-group-sm">
+                <a
+                  class="btn btn-success"
+                  href="versioncontrol/{{ value }}"
+                  role="button"
+                >
+                  <i class="fa fa-plus" aria-hidden="true"></i
+                > Version Control</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

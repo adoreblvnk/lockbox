@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mark ISPJ Admin Page</title>
+
+    <style>
+        * {
+        font-family:monospace;
+        text-align: center;
+        position: relative;
+        background-color:#ababab;
+
+        }
+        h2 {
+        font-size:3vw;
+        margin-bottom: 10px;
+        }
+        button {
+          margin-top:4.8vh;
+          font-size:2vw;
+          background-color:#636363;
+        }
+        button:hover{
+          color:white;
+        }
+
+        .fileDisplay{
+            width:50%;
+            padding:20px;
+        }
+        table{
+              margin-left: auto;
+    margin-right: auto;
+        }
+     table > * {
+     margin:30px;
+     border:none;
+     text-align:center;
+    font-size:1.3em;
+     }
+  td{
+  padding-top:15px;
+  padding-left:20px;
+  padding-right:20px;
+  }
+
+    input, textarea{
+    border-style: solid;
+    border-width: 2px;
+}
+    #ErrorMessage {
+    background-color:red;
+    font-size:1.3em;
+    }
+
+    footer{
+    width:100px !important;
+    }
+    </style>
+</head>
+<body>
+<h2>Advanced File Controls</h2>
+<p id="ErrorMessage">{{ErrorMessage}}</p>
+
+<img class="fileDisplay"src="{{path_to_file}}">
+ <form method="post" id="AFCform">
+<table>
+<thead>
+  <tr>
+    <td>Encrypt File</td>
+    <td><input type="checkbox" name="encrypt?" value="1"></td>
+    <td><input type="text" name="encryptKey" placeholder="encryption password"></td>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Maximum Session Time</td>
+    <td><input type="checkbox" name="maximum?" value="1"></td>
+    <td><input type="number" name="maximum"
+       min="1" max="120" value="60"> (seconds)</td>
+  </tr>
+  <tr>
+    <td>Delete After</td>
+    <td><input type="checkbox" name="delafter?" value="1"></td>
+    <td><input type="datetime-local"
+       name="delafter" value="2021-12-17T16:30"
+       min="2021-06-07T00:00" max="2023-06-14T00:00"></td>
+  </tr>
+  <tr>
+    <td>Maximum Views</td>
+    <td><input type="checkbox" name="maxviews?" value="1"></td>
+    <td><input type="number" name="maxviews"
+       min="1" max="120" value="1"> views</td>
+  </tr>
+  <tr>
+    <td>Watermark</td>
+    <td><input type="checkbox" name="watermark?" value="1"></td>
+    <td><textarea rows="5" cols ="30" name="watermark" maxlength="124" style="resize: none;">
+Watermark Text Goes Here
+</textarea></td>
+  </tr>
+</tbody>
+</table>
+<button type="submit">Confirm</button>
+ </form>
+
+
+<script>
+        let exampleForm =  document.getElementById('AFCform');
+exampleForm.addEventListener('submit', event => {
+  event.preventDefault();
+
+  let inputElements = exampleForm.querySelectorAll("input");
+
+  inputElements.forEach(function(input) {
+    console.log(input.name+": "+input.value);
+  });
+
+});
+</script>
+</body>
+</html>

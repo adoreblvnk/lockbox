@@ -1,0 +1,56 @@
+# Byte-Compiled / Optimized / DLL Files
+__pycache__/
+**/__pycache__/
+
+# Installer Logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Pycharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Credentials (Keep @ Bottom)
+.env
+
+# Database
+database/*
+!database/.placeholder
+
+# User Files
+files/*
+!files/foo
+
+# Logs
+errorlog.txt
+
+# SVM
+SupportVectorMachine/*
+!SupportVectorMachine/training.txt
+
+# Others
+assets/

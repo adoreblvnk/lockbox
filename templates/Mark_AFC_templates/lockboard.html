@@ -1,0 +1,225 @@
+{% extends "Mark_AFC_templates/AFClayout.html" %}
+{% block header %}
+
+<title>LockBoard</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+ <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<style>
+td {
+    width: auto;
+}
+
+td.min {
+    width: 3%;
+    white-space: nowrap;
+}
+div .modal-body *{
+color:black;
+}
+.close span, .fa-question{
+color:black;
+}
+div #content-wrapper{
+background-color:black;
+}
+
+footer.sticky-footer{
+background-color:#363636 !important;
+width:100% !important;
+}
+
+
+* {
+color:white;
+}
+
+#map { height: 500px; margin:30px; border-radius:5px; z-index:5;}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background-color: black;
+    }
+
+.leaflet-popup-content p {
+   margin:0px;
+    text-align: center;
+}
+
+table {
+
+}
+
+table>* {
+	margin: 30px;
+	border: none;
+	text-align: left;
+	font-size: 1.2em;
+}
+
+td,th {
+	padding-top: 15px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+input,textarea {
+	border-style: solid;
+	border-width: 2px;
+	color:black;
+}
+</style>
+{% endblock %}
+ {% block content %}
+
+<body>
+ <div id="preloader"> <img src="/static/lockboard.png" alt="lockboard"> </div>
+<h2>LockBoard File Access Viewer<span>&nbsp&nbsp&nbsp</span><button type="button" onclick="$('#helpModal').modal('show')" class="btn btn-warning"><i class="fas fa-question"></i></button></h2>
+<p>File: {{filename}}<br>Total: {{views}} views</p>
+<p></p>
+
+<div class="container">
+
+  <div id="map"></div>
+      <h4>Log Info (last 20 entries)</h4>
+    <input type="text" id="search" placeholder="Type to search">
+ <table id='titletable' style="margin-top:15px;"><thead><th>Time Accessed</th><th>Time</th><th>Country</th><th>Username</th></thead></table>
+
+    <table id="logtable" style="margin-bottom:15px;"><tbody>
+  {% for item in logs %}
+  <tr><td>{{item[1]}}</td><td>{{item[2]}}</td><td>{{item[3]}}</td><td>{{item[4]}}</td> </tr>
+{% endfor %}
+</tbody></table>
+           <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="color:black;">LockBoard File Access Viewer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="color:black;">
+<p>Meet LockBoard, an innovative File Access Viewer for LockBox.</p>
+<p>When configuring security settings, it&apos;s often important to know who is accessing your files, and how they&apos;re doing it.</p>
+<p>LockBoard makes a record each time your files is accessed, and presents them to you in a user-friendly format.</p>
+<p>You can even copy the logs out and import them to a third party analysis tool.</p>
+          <hr>
+<p>We understand that there is a tradeoff between Data Security and Data Privacy. That&apos;s why we anonymize client locations by logging the country, not the ip address directly. Note that locations are generated using a reverse geocoding algorithm, and may not always be accurate.</p>
+      </div>
+              <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+setTimeout(function () {
+    document.getElementById('preloader').remove()
+}, 1400)
+</script>
+ <script type="text/javascript" src="/static/ModifiedCountryJson.js"></script>
+
+ <script type="text/javascript">
+   var map = L.map('map').setView([1.3,103.8], 10);
+
+L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}@2x.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+function getColor(d) {
+    return d > 50 ? '#800026' :
+           d > 20  ? '#BD0026' :
+           d > 10  ? '#E31A1C' :
+           d > 5  ? '#FC4E2A' :
+           d > 3   ? '#FD8D3C' :
+           d > 0   ? '#FEB24C' :
+           d = 0   ? '#FFFFFF' :
+                      '#FFFFFF';
+}
+function getViews(d) {
+  var dict = { {{MapJsVars |safe}} };
+      cviews = dict[d];
+  if (cviews != undefined) {
+
+  return dict[d];
+
+} else {
+  return 0;
+}
+
+
+}
+function style(feature) {
+  console.log(feature["properties"]["sovereignt"]);
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor(getViews(feature["properties"]["sovereignt"]))
+		};
+	}
+
+	function highlightFeature(e) {
+		var layer = e.target;
+
+		layer.setStyle({
+			weight: 5,
+			color: '#666',
+			dashArray: '',
+			fillOpacity: 0.7
+		});
+
+		if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+			layer.bringToFront();
+		}
+
+	}
+
+	var geojson;
+
+	function resetHighlight(e) {
+		geojson.resetStyle(e.target);
+	}
+
+
+	function onEachFeature(feature, layer) {
+	 var popuptext = "<h3>" + feature["properties"]["sovereignt"] +"</h3><p>" + getViews(feature["properties"]["sovereignt"])+" Views</p>"
+		layer.on({
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+		}).bindPopup(popuptext);
+	}
+
+	geojson = L.geoJson(countriesData, {
+		style: style,
+		onEachFeature: onEachFeature
+	}).addTo(map);
+
+	map.attributionControl.addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>');
+
+
+
+
+</script>
+</div>
+
+<script>
+var $rows = $('#logtable tr');
+$('#search').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+</script>
+{% endblock %}

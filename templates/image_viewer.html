@@ -1,0 +1,22 @@
+{% extends "layout.html" %} {% block content %} {% include
+"includes/_flashmsg.html" %}
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <i class="fa fa-angle-left" aria-hidden="true"></i>
+    <a href="/files"> Go Back</a>
+  </li>
+</ol>
+
+<section style="text-align: center">
+  <img
+    src="{{ url_for('download_image', filename=filename) }}"
+    alt="user image"
+    style="max-width:100%;max-height:100%;padding: 20px;display:none"
+  />
+      <img class="fileDisplay" style="max-width:100%;max-height:100%;padding: 20px;" id='imageDisplay' src="data:image/png;base64, {{b64image}}">
+         <p id='textDisplay' style="line-break:anywhere;display:none;">{{b64image}}</p>
+</section>
+
+{% endblock %}

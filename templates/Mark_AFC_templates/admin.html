@@ -1,0 +1,287 @@
+{% extends "Mark_AFC_templates/AFClayout.html" %}
+{% block header %}
+
+<title>AFC Editor</title>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+
+div .modal-body *{
+color:black;
+}
+.close span, .fa-question{
+color:black;
+}
+div #content-wrapper{
+background-color:black;
+}
+
+footer.sticky-footer{
+background-color:#363636 !important;
+width:100% !important;
+}
+
+
+* {
+color:white;
+}
+
+.fileDisplay {
+max-width:100%;
+max-height:100%;
+	padding: 20px;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table>* {
+	margin: 30px;
+	border: none;
+	text-align: left;
+	font-size: 1.2em;
+}
+
+td {
+	padding-top: 15px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+input,textarea {
+	border-style: solid;
+	border-width: 2px;
+	color:black;
+}
+
+input {
+  color:black;
+  padding:8px;
+}
+.form-switch .form-check-input {
+    margin-left: -1.5em !important;
+}
+</style>
+{% endblock %}
+ {% block content %}
+
+<body>
+<h2>Advanced File Control Editor<span style="width:100px;">&nbsp&nbsp&nbsp</span><button type="button" onclick="$('#helpModal').modal('show')" class="btn btn-warning"><i class="fas fa-question"></i></button>&nbsp&nbsp<button type="button" onclick="document.location.href='/bigadmin'" class="btn btn-warning">Bulk Editor</i></button></h2>
+<p id="ErrorMessage">{{ErrorMessage}}</p>
+<div class="container">
+  <div class="row">
+     <div class="col">
+
+         <p>File: {{filename}}</p>
+         <h4>File Contents:</h4>
+
+         {% if istext == 1 %}
+<p id='textDisplay' class="textDisplay">{{text}}</p>
+                  {% elif istext == 2 %}
+         <p id="rawData" style="display:none;">{{text}}</p>
+<p id='textDisplay' style="line-break:anywhere;" class="textDisplay">{{text}}</p>
+{% else %}
+<img class="fileDisplay" id='imageDisplay' src="data:image/png;base64, {{text}}">
+         <p id='textDisplay' style="line-break:anywhere;display:none;">{{text}}</p>
+{% endif %}
+
+    </div>
+
+    <div class="col"  id="AFCform">
+ <form method="post">
+<table>
+<tbody>
+  <tr>
+    <td>Encrypt File</td>
+    <td><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="encrypt?" value="1" {{CheckboxValues[0]}}></div></td>
+    <td><input type="text" name="encrypt" placeholder="encryption password" {{CheckboxValues[-1]|safe}} value="{{fileAFCData[0]}}"></td>
+  </tr>
+  <tr>
+    <td>Max Session Time</td>
+    <td><div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" name="maximum?" value="1" {{CheckboxValues[1]}}>
+</div></td>
+    <td><input type="number" name="maximum"
+       min="1" max="99999" value="{{fileAFCData[1]}}"> (seconds)</td>
+  </tr>
+  <tr>
+    <td>Delete After</td>
+    <td><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="delafter?" value="1" {{CheckboxValues[2]}}></div></td>
+    <td><input type="datetime-local"
+       name="delafter" value="{{fileAFCData[2]}}"
+       min="2021-06-07T00:00" max="2023-06-14T00:00"></td>
+  </tr>
+  <tr>
+    <td>Max Views</td>
+    <td><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="maxviews?" value="1" {{CheckboxValues[3]}}></div></td>
+    <td><input type="number" name="maxviews"
+       min="1" max="120" value="{{fileAFCData[3]}}"> views</td>
+  </tr>
+  <tr>
+    <td>Watermark</td>
+    <td><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="watermark?" value="1" {{CheckboxValues[4]}}></div></td>
+    <td><textarea rows="5" cols ="30" name="watermark" maxlength="124" style="resize: none;">{{fileAFCData[4]}}</textarea></td>
+  </tr>
+
+  <tr><td><button type="button" onclick="$('#presetModal').modal('show')" class="btn btn-warning">Presets</button></td><td></td><td><button type="submit" class="btn btn-danger">Confirm</button></td></tr>
+</tbody>
+</table>
+                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+ </form>
+
+        <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Advanced File Configuration</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="color:black;">
+<p>With LockBox&apos;s unique <strong>Advanced File Controls</strong>, you can set up policies to meet each file&apos;s unique security requirements.</p>
+<p><strong>ENCRYPTION</strong> (powered by LockBytes)</p>
+<p>Encrypt your file with our unique end-to-end LockBytes encryption system.</p>
+<p>LockBytes is built on the powerful AES256 encryption standard.</p>
+<p>Once you select this option, your file is immediately encrypted on our server using your secret key.</p>
+<p>When someone requests for the file, it will be sent to them, still encrypted. Finally, the LockBytes client script will prompt the user for the key and decrypt the file directly in their browser window. If someone was monitoring your internet traffic, the file would be a meaningless blob of characters.&nbsp;</p>
+<p>Compared to simply asking for another password, encrypting your file makes it unretrievable to anyone without the key, even if they manage to hack into our servers.</p>
+<p>We never store your encryption key. It is discarded immediately after we encrypt your file.</p>
+<p><strong>MAXIMUM SESISON LENGTH</strong></p>
+<p>Many data breaches started with a but of shoulder surfing, or someone who left their tabs open on an unintended device.</p>
+<p>Don&apos;t let this happen to your data. Select this option, and any inactive users will be automatically logged out.</p>
+<p><strong>FILE EXIPRY DATE</strong></p>
+<p>Leaving a trail of sensitive documents on the internet is never a good idea. You might forget them, but Google never does.</p>
+<p>Take a step towards data security by marking a file for deletion after a certain date.</p>
+<p>After the expiry date, you can choose to have your file deleted permanently, or just taken offline.</p>
+<p><strong>MAXIMUM NUMBER VIEWS</strong></p>
+<p>Sharing a file meant for only one person? Make sure the file can only be viewed once. This is also great for sharing SSH keys and secrets.</p>
+<p>Once the file is out of views, you can choose to have your file deleted permanently, or just taken offline.</p>
+<p><strong>WATERMARK</strong></p>
+<p>Add a watermark over your documents to remind users of its data classification.</p>
+<p>This feature also doubles up as a copyright protection tool. Leave your watermak on your images so people know you created them.</p>
+<p>All text is edited directly on the image. Only the watermarked version will sent out over the internet.</p>
+<hr>
+<p><strong>PRESETS</strong></p>
+<p>Too many files to configure individually? No problem. Pick a preset that best describes your data.</p>
+<p><strong>Restricted Data:</strong></p>
+<p>This is for highly sensitive data that requires the best level of protection, and uses a high number of advanced security controls.</p>
+<p>Examples: employee personal information, app authorization keys</p>
+<p>Includes:</p>
+<p>- 120 seconds maximum session time</p>
+<p>- File expires in 7 days</p>
+<p>- Watermark for image files</p>
+          <p><i>Turning on LockBytes Encryption is advised.</i></p>
+<p><strong>Internal Data:</strong></p>
+<p>This is for data with medium security requirements, but still not intended for public disclosure.</p>
+<p>Examples: Marketing research, graphic design assets</p>
+<p>Includes:</p>
+<p>- 1 hour maximum session time</p>
+<p>- File expires in 7 days</p>
+<p>- Watermark for image files</p>
+<p><strong>Public Data:</strong></p>
+<p>This is for data that can be freely disclosed to the public, and therefore has minimal restrictions.&nbsp;</p>
+<p>You can also use this preset to clear all other options.</p>
+<p>Examples: promotional materials, posters</p>
+<p>Includes:</p>
+<p>- File expires in 1 year</p><hr>
+<p>Remember that LockBox provides data transfer, not data storage. To reduce the window of attack, files should not remain online longer than necessary.</p>
+      </div>
+              <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="presetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Pick a preset</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="color:black;">
+Our pre-configured options help you protect your data easily.
+      </div>
+              <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="SetRestricted()">Private</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="SetInternal();">Internal</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="SetPublic();">Public</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{newcode|safe}}
+
+    </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+      <script id="socketio-logger">
+$(document).ready(function() {
+            // Connect to the Socket.IO server.
+            // The connection URL has the following format, relative to the current page:
+            //     http[s]://<domain>:<port>[/<namespace>]
+            var socket = io();
+
+            // Event handler for new connections.
+            // The callback function is invoked when a connection with the
+            // server is established.
+            socket.on('connect', function() {
+                console.log('connected to server');
+            });})
+
+      </script>
+
+      <script>
+var ShowModal = setTimeout(function(){$('#presetModal').modal('show')}, 100);
+function SetRestricted() {
+inputs = document.getElementsByTagName('input');
+inputs[2].checked=true;
+inputs[3].value=120
+inputs[4].checked=true;
+var now = new Date();
+var newDateObj = new Date(now.getTime() + 32*60*60000);
+inputs[5].value=newDateObj.toISOString().slice(0,-8);
+inputs[8].checked=true;
+document.getElementsByTagName('textarea')[0].value="Restricted Data. Highly Sensitive.";
+return
+};
+
+
+function SetInternal() {
+inputs = document.getElementsByTagName('input');
+inputs[0].checked=false;
+inputs[6].checked=false;
+inputs[2].checked=true;
+inputs[3].value=3600
+inputs[4].checked=true;
+var now = new Date();
+var newDateObj = new Date(now.getTime() + (7*24+8)*60*60000);
+inputs[5].value=newDateObj.toISOString().slice(0,-8);
+inputs[8].checked=true;
+document.getElementsByTagName('textarea')[0].value="Internal Data. Do not share.";
+return
+};
+
+function SetPublic() {
+inputs = document.getElementsByTagName('input');
+inputs[0].checked=false;
+inputs[2].checked=false;
+inputs[4].checked=true;
+var now = new Date();
+var newDateObj = new Date(now.getTime() + (52*7*24+8)*60*60000);
+inputs[5].value=newDateObj.toISOString().slice(0,-8);
+inputs[6].checked=false;
+inputs[8].checked=false;
+return
+};
+      </script>
+  </div>
+
+
+{% endblock %}

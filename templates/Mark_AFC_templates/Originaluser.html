@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mark ISPJ User Page</title>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+    <style>
+        * {
+        font-family:monospace;
+        text-align: center;
+        position: relative;
+        background-color:#ababab !important;
+         font-size:1.3em;
+        }
+        h2 {
+        font-size:3vw;
+        margin-bottom: 10px;
+        }
+        button {
+          margin-top:4.8vh;
+          font-size:2vw !important;
+          background-color:#636363 !important;
+        }
+        button:hover{
+          color:white !important;
+        }
+
+        .fileDisplay{
+            width:50%;
+            padding:20px;
+        }
+        table{
+              margin-left: auto;
+    margin-right: auto;
+        }
+     table > * {
+     margin:30px;
+     border:none;
+     text-align:center;
+    font-size:1.3em;
+     }
+  td{
+  padding-top:15px;
+  padding-left:20px;
+  padding-right:20px;
+  }
+
+    input, textarea{
+    border-style: solid;
+    border-width: 2px;
+}
+    #Message {
+    background-color:yellow;
+    }
+    #ErrorMessage {
+    background-color:red;
+    font-size:1.3em;
+    }
+    </style>
+</head>
+<body>
+<h2>User View</h2>
+<p id="ErrorMessage">{{ErrorMessage}}</p>
+<img class="fileDisplay"src="{{path_to_file}}">
+
+<p>Current time: {{time}}</p>
+{%- for item in attrs%}
+<p style="font-size:1.3em;">{{item[0]}} : {{item[1]}}</p>
+{% endfor %}
+<!-- Modal -->
+<div class="modal fade" id="timeoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Time's nearly up!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Would you like to extend your session?
+      </div>
+              <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="userExtendSession()">Yes</button>
+        <button type="button" class="btn btn-secondary" onclick="userEndSession();">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var socket = io();
+socket.on('ending', function(){
+$('#timeoutModal').modal('show');
+});
+
+function userEndSession() {
+  window.location.replace("https://www.google.com");
+  socket.emit('userEndSession');
+}
+
+function userExtendSession() {
+socket.emit('extend');
+window.clearTimeout(timeoutHandle);
+var timeoutHandle = setTimeout(failsafe, {{timeouttime}}*1000);
+}
+
+//socket.on('ending', function(){
+//$('#timeoutModal').modal('show');
+//if (confirm("Time's nearly up. Extend session?") == true){
+//socket.emit('extend');}
+//else{
+//document.location.replace('https://www.google.com');}
+//});
+
+
+socket.on('timeout', function(){
+document.location.replace('https://www.google.com');
+});
+
+//failsafe
+
+var timeoutHandle = setTimeout(failsafe, {{timeouttime}}*1000);
+
+function failsafe() {
+if ({{timeouttime}} > 0) {
+  userEndSession()
+};
+}
+</script>
+</body>
+</html>

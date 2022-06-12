@@ -1,0 +1,25 @@
+{% extends "layout.html" %} {% block content %}
+
+<!-- Page Content -->
+<div class="card w-50">
+  <div class="card-header">Upload file</div>
+  <div class="card-body">
+    <form method="POST" enctype="multipart/form-data">
+      
+      <!-- josef: csrf tokens. -->
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+      <input type="file" name="file" />
+      <br />
+      <br />
+
+      <!-- josef: remove password field -->
+      <!-- {{ form.key(class="form-control") }} -->
+      
+      <br />
+      <input class="btn btn-primary" type="submit" />
+    </form>
+  </div>
+</div>
+
+{% endblock %}

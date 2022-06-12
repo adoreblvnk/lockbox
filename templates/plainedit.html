@@ -1,0 +1,16 @@
+{% extends "layout.html" %} {% block content %}
+<section style="text-align: center">
+    <form action="/files/{{ filename }}/update" method="POST">
+        <!-- josef: csrf token -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <textarea name="updatedtext" id="textDisplay" rows="20" cols="100" >{{ text }}</textarea>
+        <br>
+        <button class="btn btn-primary mr-1" name="submitbtn">Submit</button>
+        <br>
+        <br>
+    </form>
+</section>
+
+{{newcode|safe}}
+{% endblock %}

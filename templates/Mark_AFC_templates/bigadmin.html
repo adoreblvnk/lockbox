@@ -1,0 +1,265 @@
+{% extends "Mark_AFC_templates/AFClayout.html" %}
+{% block header %}
+
+<title>AFC Master Editor</title>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+
+div .modal-body *{
+color:black;
+}
+.close span, .fa-question{
+color:black;
+}
+div #content-wrapper{
+background-color:black;
+}
+
+footer.sticky-footer{
+background-color:#363636 !important;
+width:100% !important;
+}
+
+
+* {
+color:white;
+}
+body {
+  background-color: black;
+}
+
+.container {
+  width: 70%;
+  min-width: 50%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+.kanban-board {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: sans-serif;
+}
+
+
+.kanban-block,
+.create-new-task-block {
+  padding: 0.6rem;
+  width: 30.5%;
+  min-width: 14rem;
+  min-height: 4.5rem;
+  border-radius: 0.3rem;
+  margin-left:10px;
+}
+
+#todo {
+  background-color: #5cb85c;
+}
+
+#inprogress {
+  background-color: #f0ad4e;
+}
+
+#done {
+  background-color: #d9534f;
+}
+
+#custom {
+  background-color: #8a8a8a;
+}
+
+strong {
+color:black;
+}
+
+.task {
+  background-color: black;
+  margin: 0.2rem 0rem 0.3rem 0rem;
+  padding: 0.5rem 0.2rem 0.5rem 2rem;
+
+}
+
+#task-button {
+  margin: 0.2rem 0rem 0.1rem 0rem;
+  background-color: white;
+  border-radius: 0.2rem;
+  width: 100%;
+  border: 0.25rem solid black;
+  padding: 0.5rem 2.7rem;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+}
+
+.create-new-task-block {
+  display: none;
+  /* display: flex; */
+  background: #ffaf00;
+  width: 64.4%;
+  flex-direction: column;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  margin: 0.2rem;
+}
+
+.form-row-label {
+  width: 15%;
+  padding: 0.2rem;
+  padding-right: 0.5rem;
+  border: 0.1rem solid black;
+  border-right: 0;
+  border-radius: 0.2rem 0rem 0rem 0.2rem;
+}
+
+.form-row-input {
+  border: 0.1rem solid black;
+  border-radius: 0rem 0.2rem 0.2rem 0rem;
+  width: 85%;
+}
+
+textarea {
+  resize: none;
+}
+
+.form-row-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.2rem;
+}
+
+#edit-button,
+#save-button,
+#cancel-button {
+  margin: 0.2rem 0rem 0.1rem 0rem;
+  background-color: white;
+  border-radius: 0.2rem;
+  width: 49.2%;
+  border: 0.25rem solid black;
+  padding: 0.5rem 2.7rem;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+}
+
+#edit-button {
+  display: none;
+}
+
+</style>
+{% endblock %}
+ {% block content %}
+
+<body>
+<h2>AFC Master Editor<span style="width:100px;">&nbsp&nbsp&nbsp</span><button type="button" onclick="$('#helpModal').modal('show')" class="btn btn-warning"><i class="fas fa-question"></i></button></h2>
+<p id="ErrorMessage">{{ErrorMessage}}</p>
+<!--reference from https://codepen.io/karthikdevarticles/pen/PopxPwO  -->
+
+    <div class="container">
+        <div class="kanban-heading">
+            <strong class="kanban-heading-text">Kanban Board</strong>
+        </div>
+        <div class="kanban-board">
+            <div class="kanban-block" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>Public</strong>
+                <div class="task-button-block">
+                </div>
+                {% for value in public %}
+                       <div class="task" id="{{ value }}" draggable="true" ondragstart="drag(event)">
+                    <span>{{ value }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="kanban-block" id="inprogress" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>Internal</strong> {% for value in internal %}
+                <div class="task" id=" {{ value }}" draggable="true" ondragstart="drag(event)">
+                    <span>{{ value }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="kanban-block" id="done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>Private</strong>
+                                {% for value in private %}
+                <div class="task" id=" {{ value }}" draggable="true" ondragstart="drag(event)">
+                    <span>{{ value }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="kanban-block" id="custom" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>No Category</strong>
+                 {% for value in custom %}
+                <div class="task" id=" {{ value }}" draggable="true" ondragstart="drag(event)">
+                    <span>{{ value }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+<form id="bulkAFC" method="post">
+ <input type="hidden" id="public" name="public">
+ <input type="hidden" id="internal" name="internal">
+ <input type="hidden" id="private" name="private">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+<button type="submit" class="btn btn-danger" style="margin-left: 70%;margin-top: 50px;">Confirm</button>
+    </form>
+	<script>
+	var publicnames = [];
+	var internalnames = [];
+	var privatenames = [];
+function updateforms() {
+publicnames = [];
+internalnames = [];
+privatenames = [];
+var public = document.getElementById('todo').children;
+
+for (let i = 1; i <public.length;i++) {
+	publicnames.push(public[i].id);
+	publicnames = [...new Set(publicnames)];
+}
+
+var internal = document.getElementById('inprogress').children;
+
+for (let i = 1; i <internal.length;i++) {
+	internalnames.push(internal[i].id);
+	internalnames = [...new Set(internalnames)];
+}
+
+var private = document.getElementById('done').children;
+for (let i = 1; i <private.length;i++) {
+	privatenames.push(private[i].id);
+	privatenames = [...new Set(privatenames)];
+}
+document.getElementById('public').value=publicnames.toString()
+document.getElementById('internal').value=internalnames.toString()
+document.getElementById('private').value=privatenames.toString()
+}
+		function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.currentTarget.appendChild(document.getElementById(data));
+            updateforms();
+        }
+
+	</script>
+
+
+{% endblock %}

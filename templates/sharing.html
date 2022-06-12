@@ -1,0 +1,150 @@
+{% extends "layout.html" %} {% block content %} {% include
+"includes/_flashmsg.html" %}
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <i class="fa fa-angle-left" aria-hidden="true"></i>
+    <a href="/files"> Go Back</a>
+  </li>
+</ol>
+
+<!-- DataTables Example -->
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-table"></i>
+    Anonymous Sharing
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered"
+        id="dataTable"
+        width="100%"
+        cellspacing="0"
+      >
+        <thead>
+          <tr>
+            <th>filename</th>
+            <th style="width: 25%">anonymous sharing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              {{ filename }} <i class="fa fa-lock" aria-hidden="true"></i>
+            </td>
+            <td>
+              <form class="" method="POST" action="">
+                <!-- josef: csrf tokens. -->
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
+
+                <!-- <button
+                  class="btn btn-success btn-block"
+                  type="submit"
+                  name="vc_checkout"
+                  value="{{ key }}"
+                >
+                  Revert to This Version
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                </button> -->
+                <button
+                  type="button"
+                  class="btn btn-success btn-block"
+                  data-toggle="modal"
+                  data-target="#delModal"
+                >
+                  <i class="fas fa-share"></i> Anonymous Sharing
+                </button>
+                <!-- Modal -->
+                <div
+                  class="modal fade"
+                  id="delModal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Share this file?
+                        </h5>
+                        <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>
+                          Sharing this file allows for other people to view this
+                          file.
+                        </p>
+                      </div>
+                      <form class="" method="POST" action="">
+                        <div class="modal-footer justify-content-between">
+                          <input
+                            class=""
+                            type="checkbox"
+                            name="share"
+                            value="True"
+                            data-toggle="toggle"
+                            data-size="small"
+                          />
+                          <form class="" id="formName" method="POST" action="">
+                            <!-- josef: csrf tokens. -->
+                            <input
+                              type="hidden"
+                              name="csrf_token"
+                              value="{{ csrf_token() }}"
+                            />
+                            <button class="btn btn-success" type="submit">
+                              Submit
+                            </button>
+                          </form>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row">
+    <div class="col mx-auto">
+      <!-- Timeline -->
+      <ul class="timeline">
+        {% if fileid %}
+        <div class="media position-relative">
+          <div class="media-body">
+            <h5 class="mt-0">Here is your generated link!</h5>
+            <br>
+            <pre>/anonymous/{{ fileid }}</pre>
+            <a href="../anonymous/{{ fileid }}" class="stretched-link">Or click here.</a>
+          </div>
+        </div>
+        {% endif %}
+        <!-- ?? add sth here? -->
+      </ul>
+      <!-- End -->
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>LockBox - Login</title>
+
+    <!-- Webcam Javascript -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"
+    ></script>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="/static/vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <!-- Custom styles for this template-->
+    <link href="/static/css/sb-admin.css" rel="stylesheet" />
+    <style>
+      .input-group-prepend {
+        width: 36px;
+        height: 38px;
+      }
+    </style>
+    <script async src="/cdn-cgi/bm/cv/669835187/api.js"></script>
+  </head>
+
+  <body class="bg-dark">
+    {% block body %}
+    <div class="container">
+      {% include "includes/_flashmsg.html" %}
+      <div class="card card-login mx-auto mt-5">
+        <div class="card-header">Login</div>
+        {% from "includes/_formhelpers.html" import render_field %}
+        <div class="card-body">
+          <form method="POST" action="">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <dt><label for="username"></label></dt>
+            <div class="input-group mb-3">
+              {#render_field(form.username, class_="form-control")#}
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"
+                  ><i class="fa fa-user"></i
+                ></span>
+              </div>
+              <input
+                autofocus=""
+                class="form-control"
+                id="username"
+                maxlength="100"
+                minlength="1"
+                name="username"
+                placeholder="Username"
+                type="text"
+                value=""
+                required
+              />
+            </div>
+            <dt><label for="password"></label></dt>
+            <div class="input-group mb-3">
+              {#render_field(form.password, class_="form-control")#}
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon 1"
+                  ><i class="fa fa-key"></i
+                ></span>
+              </div>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Password"
+                id="password"
+                maxlength="100"
+                minlength="3"
+                aria-label="Password"
+                aria-describedby="basic-addon 1"
+                value=""
+                required
+              />
+            </div>
+            <div class="form-group">
+              <!-- An element to toggle between password visibility -->
+              <input type="checkbox" onclick="myFunction()" /> Show Password
+            </div>
+            <!-- Face Recognition -->
+            <div class="form-group">
+              <label for="submitPhoto"><b>Scan your face</b></label>
+              <input
+                type="hidden"
+                name="submitPhoto"
+                id="submitPhoto"
+                required
+              />
+              <input
+                type="button"
+                value="Open Camera"
+                class="btn btn-outline-primary"
+                onclick="openCamera()"
+              />
+              <input
+                type="button"
+                value="Take a Snap"
+                class="btn btn-outline-primary"
+                id="btPic"
+                onclick="takeSnapShot()"
+              />
+              <br /><br />
+
+              <div
+                id="camera"
+                style="
+                  height: auto;
+                  width: auto;
+                  text-align: left;
+                  display: none;
+                "
+              ></div>
+              <p id="snapShot" style="display: none"></p>
+            </div>
+            <div class="form-group">{{form.recaptcha()}}</div>
+            <br />
+            <label>
+              <input type="checkbox" value="remember-me" /> Remember me
+            </label>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">
+              Login
+            </button>
+          </form>
+          <div class="text-center">
+            <a class="d-block small mt-3" href="register"
+              >Register an Account</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Webcam Javascript  -->
+    <script>
+      // CAMERA SETTINGS.
+      Webcam.set({
+        width: 350,
+        height: 300,
+        image_format: "jpeg",
+        jpeg_quality: 100,
+      });
+
+      openCamera = function () {
+        document.getElementById("camera").style.display = "block";
+        Webcam.attach("#camera");
+      };
+      // SHOW THE SNAPSHOT.
+      takeSnapShot = function () {
+        Webcam.snap(function (data_uri) {
+          console.log(data_uri);
+          document.getElementById("camera").style.display = "none";
+          document.getElementById("snapShot").innerHTML =
+            '<img src="' + data_uri + '" width="350px" height="300px" />';
+          document.getElementById("snapShot").style.display = "block";
+
+          document.getElementById("submitPhoto").value = data_uri;
+        });
+      };
+    </script>
+
+    <!-- show pw -->
+    <script>
+      function myFunction() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+          x.type = "text";
+        } else {
+          x.type = "password";
+        }
+      }
+    </script>
+    <script type="text/javascript">
+      (function () {
+        window["__CF$cv$params"] = {
+          r: "6dd57641a89787e3",
+          m: "7MewouujQ4N3XVwEdut_zM0fEMWZ0s9bwVx3JP8OYpM-1644832957-0-Ad9sPU+zvtVJrHR29XyZAOwWs+Ql2jwkgMH9eGP1FS9bVStjpoAofQ+RlrJYui/uhVOTLD0vHTdRyLPv5fiAoHh1lisXAcHPPXERI+24hro1ITZZ1WItJQRcP/SvBy/B7QlwdaYhLv2wgN8FU5I8+Lzrvx9LHYhD/Bw2zVQiVyWPwfLeX9BUV8sKOABlxVQiXA==",
+          s: [0x2f47f4176c, 0xfaf9634d1a],
+        };
+      })();
+    </script>
+  </body>
+</html>
+<!-- Aden Seow -->
