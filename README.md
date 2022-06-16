@@ -8,9 +8,50 @@ prod by blvnk.
 
 LockBox is a secure file storage & file-sharing site. It is focused on data security, ensuring the safety of files & sensitive information.
 
-### Signup
+### Signup / Login
 
-<img src="img/signup_pw.png" width=600>
+**Signup**
+
+<img src="img/signup_pw.png" width=1000>
+
+**Login**
+
+<img src="img/login.png" width=1000>
+
+- Client-Side Password Validation
+- Server-Side Machine Learning via SVM (Support Vector Machine)
+- 2FA with Phone Number
+- Facial Recognition (not fully implemented)
+
+### Home Page
+
+<img src="img/home_page.png" width=1000>
+
+### File Operations
+
+**File Upload**
+
+<img src="img/file_upload.png" width=1000>
+
+**Text Editor**
+
+<img src="img/text_editor.png" width=1000>
+
+- File Download
+- File Deletion
+
+### Anonymous Sharing
+
+<img src="img/anonymous_sharing.gif" width=1000>
+
+Notes:
+
+- Generates a random URL as file link.
+
+### Additional Features
+
+- CSRF Tokens
+- ReCaptcha
 
 ## Getting Started
 
@@ -33,3 +74,6 @@ This project is licensed under the terms of the MIT license.
 ## Credits
 
 - blvnk
+- edwin
+- aden
+- mark
