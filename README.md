@@ -10,7 +10,7 @@ LockBox is a secure file storage & file-sharing site. It is focused on data secu
 
 ### Signup
 
-<img src="img/signup_pw.png">
+<img src="img/signup_pw.png" width=600>
 
 ## Getting Started
 
