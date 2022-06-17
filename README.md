@@ -20,7 +20,7 @@ LockBox is a secure file storage & file-sharing site. It is focused on data secu
 
 - Client-Side Password Validation
 - Server-Side Machine Learning via SVM (Support Vector Machine)
-- 2FA with Phone Number
+- 2FA with Phone Number w/ Twilio
 - Facial Recognition (not fully implemented)
 
 ### Home Page
@@ -48,10 +48,16 @@ Notes:
 
 - Generates a random URL as file link.
 
+### Version Control
+
+<img src="img/version_control.gif" width=1000>
+
 ### Additional Features
 
 - CSRF Tokens
-- ReCaptcha
+- CAPTCHA w/ reCAPTCHA
+- Malware Checking w/ Virus Total
+- NER (Named Entity Recognition) to Extract Potentially Identifiable Information in Text Files
 
 ## Getting Started
 
