@@ -3,6 +3,8 @@
     <h1>LockBox</h1>
 </div>
 
+---
+
 <details>
 <summary>Table of Contents</summary>
 
