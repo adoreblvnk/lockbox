@@ -27,7 +27,7 @@
 
 ## About
 
-LockBox is a secure file storage & file-sharing site. It is focused on data security, ensuring the safety of files & sensitive information.
+LockBox is a secure file storage & file-sharing site. It is focused on data security, ensuring the safety of files & sensitive information. Developed for a school project.
 
 prod by blvnk.
 
