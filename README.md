@@ -1,6 +1,12 @@
 <div align="center">
     <img src="img/lockbox.png" width=100>
     <h1>LockBox</h1>
+    <p>
+      LockBox is a secure file storage & file-sharing site. It is focused on data security, ensuring the safety of files & sensitive information. Developed for a school project.
+    </p> <!-- Description -->
+    <p>
+      Built With: <a href="https://flask.palletsprojects.com">Flask</a> • <a href="https://getbootstrap.com">Bootstrap</a> • <a href="https://www.google.com/recaptcha">reCAPTCHA</a> • <a href="https://www.twilio.com">Twilio</a> • <a href="https://www.virustotal.com">VirusTotal</a>
+    </p> <!-- Built With -->
 </div>
 
 ---
@@ -8,7 +14,6 @@
 <details>
 <summary>Table of Contents</summary>
 
-- [About](#about)
 - [Demo](#demo)
   - [Signup / Login](#signup--login)
   - [Home Page](#home-page)
@@ -20,16 +25,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Execution](#execution)
-- [License](#license)
-- [Built With](#built-with)
-- [Credits](#credits)
 </details>
-
-## About
-
-LockBox is a secure file storage & file-sharing site. It is focused on data security, ensuring the safety of files & sensitive information. Developed for a school project.
-
-prod by blvnk.
 
 ## Demo
 
@@ -139,19 +135,11 @@ Create `.env` file in root directory.
 
     py main.py
 
-## License
+## License <!-- omit in toc -->
 
 This project is licensed under the terms of the MIT license.
 
-## Built With
-
-- [Flask](https://flask.palletsprojects.com)
-- [Bootstrap](https://getbootstrap.com)
-- [reCAPTCHA](https://www.google.com/recaptcha)
-- [Twilio](https://www.twilio.com)
-- [VirusTotal](https://www.virustotal.com)
-
-## Credits
+## Credits <!-- omit in toc -->
 
 - blvnk
 - edwin
